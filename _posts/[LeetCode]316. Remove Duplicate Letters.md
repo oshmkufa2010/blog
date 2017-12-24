@@ -1,0 +1,39 @@
+---
+title: LeetCode 316. Remove Duplicate Letters
+tags:
+  - LeetCode
+  - Stack
+  - Greedy
+permalink: 'letcode-316.,-remove,-duplicate,-leters'
+date: 2016-01-31 19:38:10
+---
+
+[题目链接](https://leetcode.com/problems/remove-duplicate-letters/)
+大意是去掉给定字符串的重复字母并保证得到的字符串按字典序最小  
+
+思路：
+对于任意一个即将要加入到结果的原字符串中的字符，如果该字符的前驱字符比它大而且在该字符后面还会出现，那么我们应该舍去前驱字符而保留后面的。
+```C++
+class Solution {
+public:
+    string removeDuplicateLetters(string s) {
+        vector<bool> visited(256,false);
+        vector<int> count(256,0);
+        string ret;
+        for(auto ch : s)
+            ++count[ch];
+        for(auto ch : s) {
+            --count[ch];
+            if(visited[ch])    //如果已经出现在结果中则直接跳过
+                continue;
+            while(ret.size() && ret.back() > ch && count[ret.back()] > 0) {
+                visited[ret.back()] = false;
+                ret.pop_back();
+            }
+            ret += ch;
+            visited[ch] = true;
+        }
+        return ret;
+    }
+};
+```
